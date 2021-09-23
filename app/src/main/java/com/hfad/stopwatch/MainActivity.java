@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private int seconds = 0;
     //Секундомер работает?
     private boolean running;
+    private boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             running = savedInstanceState.getBoolean("running");
+            running = savedInstanceState.getBoolean("running");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
         runTimer();
     }
@@ -34,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
+        savedInstanceState.putBoolean("wasRunning", wasRunning);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasRunning = running;
+        running = false;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (wasRunning) {
+            running = true;
+        }
     }
 
     //Запустить секундомер при щелчке на кнопке Start.
